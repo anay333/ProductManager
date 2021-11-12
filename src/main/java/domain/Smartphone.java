@@ -39,8 +39,8 @@ public class Smartphone extends Product{
 
     @Override
     public String toString() {
-        return "Book{" +
-                "author='" + manufacturer + '\'' +
+        return "Smartphone{" +
+                "manufacturer='" + manufacturer + '\'' +
                 '}';
     }
 }
