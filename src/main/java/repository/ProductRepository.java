@@ -36,8 +36,8 @@ public class ProductRepository {
                 tmp[index] = product;
                 index++;
             }
-
         }
         products = tmp;
     }
+
 }

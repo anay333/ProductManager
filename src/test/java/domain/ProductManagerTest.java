@@ -51,7 +51,7 @@ class ProductManagerTest {
     void shouldSearchWhenNotOneResult() {
 
         Product[] actual = productManager.searchBy("Lion");
-        Product[] expected = {first,fourth};
+        Product[] expected = {first, fourth};
         assertArrayEquals(expected, actual);
     }
 
