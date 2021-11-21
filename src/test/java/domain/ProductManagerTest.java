@@ -1,75 +1,74 @@
 package domain;
 
+import manager.ProductManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import repository.ProductRepository;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+
 
 class ProductManagerTest {
-    private Product first = new Book(1,"Lion",50,"King");
-    private Product second = new Book(2,"Window",33,"Lee");
-    private Product third = new Smartphone(3,"Huawei",300,"China");
+    private ProductRepository productRepository = new ProductRepository();
+    private ProductManager productManager = new ProductManager(productRepository);
+    private Product first = new Book(1, "Lion", 50, "King");
+    private Product second = new Book(2, "Window", 33, "Lee");
+    private Product third = new Smartphone(3, "Huawei", 300, "China");
+    private Product fourth = new Smartphone(4, "Lion", 500, "UK");
 
-    @Test
-    void shouldSearchBy1() {
-        ProductManager productManager = new ProductManager();
-
-        ProductManager.add(first);
-        ProductManager.add(second);
-        ProductManager.add(third);
-
-        Product[] actual = ProductManager.searchBy("King");
-        Product[] expected= new Product[]{first};
-        assertArrayEquals(expected,actual);
+    @BeforeEach
+    public void setUp() {
+        productManager.add(first);
+        productManager.add(second);
+        productManager.add(third);
+        productManager.add(fourth);
     }
 
     @Test
-    void shouldSearchBy2() {
-        ProductManager productManager = new ProductManager();
-
-        ProductManager.add(first);
-        ProductManager.add(second);
-        ProductManager.add(third);
-
-        Product[] actual = ProductManager.searchBy("Lion");
-        Product[] expected= new Product[]{first};
-        assertArrayEquals(expected,actual);
+    void shouldSearchByAuthor() {
+        Product[] actual = productManager.searchBy("King");
+        Product[] expected = {first};
+        assertArrayEquals(expected, actual);
     }
 
     @Test
-    void shouldSearchBy3() {
-        ProductManager productManager = new ProductManager();
+    void shouldSearchByNameBook() {
 
-        ProductManager.add(first);
-        ProductManager.add(second);
-        ProductManager.add(third);
-
-        Product[] actual = ProductManager.searchBy("Huawei");
-        Product[] expected= new Product[]{third};
-        assertArrayEquals(expected,actual);
+        Product[] actual = productManager.searchBy("Window");
+        Product[] expected = {second};
+        assertArrayEquals(expected, actual);
     }
+
     @Test
-    void shouldSearchBy4() {
-        ProductManager productManager = new ProductManager();
+    void shouldSearchByNameSmartphone() {
 
-        ProductManager.add(first);
-        ProductManager.add(second);
-        ProductManager.add(third);
-
-        Product[] actual = ProductManager.searchBy("China");
-        Product[] expected= new Product[]{third};
-        assertArrayEquals(expected,actual);
+        Product[] actual = productManager.searchBy("Huawei");
+        Product[] expected = {third};
+        assertArrayEquals(expected, actual);
     }
+
     @Test
-    void shouldSearchBy5() {
-        ProductManager productManager = new ProductManager();
+    void shouldSearchWhenNotOneResult() {
 
-        ProductManager.add(first);
-        ProductManager.add(second);
-        ProductManager.add(third);
-
-        Product[] actual = ProductManager.searchBy("Road");
-        Product[] expected= new Product[0];
-        assertArrayEquals(expected,actual);
+        Product[] actual = productManager.searchBy("Lion");
+        Product[] expected = {first,fourth};
+        assertArrayEquals(expected, actual);
     }
+
+    @Test
+    void shouldSearchByManufacturer() {
+
+        Product[] actual = productManager.searchBy("China");
+        Product[] expected = {third};
+        assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    void shouldSearchNothing() {
+
+        Product[] actual = productManager.searchBy("Road");
+        Product[] expected = {};
+        assertArrayEquals(expected, actual);
+    }
+
 }

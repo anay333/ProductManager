@@ -1,17 +1,24 @@
-package domain;
+package manager;
 
+import domain.Book;
+import domain.Product;
+import domain.Smartphone;
 import repository.ProductRepository;
 
 public class ProductManager {
+    private ProductRepository repository;
 
-    public static void add(Product product) {
-        ProductRepository.save(product);
+    public ProductManager(ProductRepository repository) {
+        this.repository = repository;
     }
 
-    public static Product[] searchBy(String text) {
+    public void add(Product product) {
+        repository.save(product);
+    }
 
+    public Product[] searchBy(String text) {
         Product[] result = new Product[0];
-        for (Product product : ProductRepository.findAll()) {
+        for (Product product : repository.findAll()) {
             if (matches(product, text)) {
                 Product[] tmp = new Product[result.length + 1];
                 System.arraycopy(result, 0, tmp, 0, result.length);
@@ -22,28 +29,21 @@ public class ProductManager {
         return result;
     }
 
-    public static boolean matches(Product product, String search) {
+    public boolean matches(Product product, String search) {
         if (product instanceof Book) {
             Book book = (Book) product;
-            if (book.getAuthor().contains(search)) {
-                return true;
-            }
             if (book.getName().contains(search)) {
                 return true;
             }
-
-            return false;
+            return book.getAuthor().contains(search);
         }
         if (product instanceof Smartphone) {
             Smartphone smartphone = (Smartphone) product;
-            if (smartphone.getManufacturer().contains(search)) {
-                return true;
-            }
             if (smartphone.getName().contains(search)) {
                 return true;
             }
+            return smartphone.getManufacturer().contains(search);
         }
-
         return false;
     }
 }
